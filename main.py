@@ -5,18 +5,20 @@ from tkinter import *
 
 window = Tk()
 window.title('Calculator')
-window.minsize(384, 254)
+window.config(bg="grey")
 
-frame = Frame(window, bg="grey", padx=10, pady=5)
-frame.pack()
-
-text = Text(frame, relief=FLAT, height=3, width=45, state="disabled")
-text.grid(column=0, row=0, columnspan=4)
+text = Text(window, height=4, font=("Roboto", 15), state="disabled")
+text.grid(column=0, row=0, columnspan=4, sticky="nswe")
 
 pi = m.pi
 euler = m.e
 calculation = ""
 EPSILON = sys.float_info.epsilon
+
+for column_index in range(0, 4):
+    window.columnconfigure(column_index, weight=1)
+for row_index in range(0, 7):
+    window.rowconfigure(row_index, weight=1)
 
 
 class FixNumber:
@@ -69,7 +71,7 @@ def factorial():
     data = list(data[::-1])
     data.remove("\n")
 
-    x = []  #
+    x = []
     y = 0
     for i in data:
 
@@ -136,54 +138,71 @@ def render_buttons():
         if column >= 3:
             column -= 3
             row += 1
-        Button(frame, text=i, font=("Roboto", 10), width=10, command=lambda x=i: click(x), bg="#00D7FF") \
+        Button(window, text=i, font=("Roboto", 10), width=3, command=lambda x=i: click(x), bg="#00D7FF") \
             .grid(row=row,
                   column=column,
-                  pady=2)
+                  pady=1, sticky="nsew")
         column += 1
 
-    Button(frame, text="0", font=("Roboto", 10), width=10, command=lambda: click(0), bg="#00D7FF").grid(row=6, column=1,
-                                                                                                        pady=2)
-    Button(frame, text=".", font=("Roboto", 10), width=10, command=lambda: click(".")).grid(row=6, column=2, pady=2)
-    Button(frame, text="Clear", font=("Roboto", 10), width=10, command=clear).grid(row=6, column=0, pady=2)
+    Button(window, text="0", font=("Roboto", 10), width=3, command=lambda: click(0), bg="#00D7FF").grid(row=6, column=1,
+                                                                                                        pady=1,
+                                                                                                        sticky="nsew")
+    Button(window, text=".", font=("Roboto", 10), width=3, command=lambda: click(".")).grid(row=6, column=2,
+                                                                                            columnspan=1, pady=1,
+                                                                                            sticky="nsew")
+    Button(window, text="Clear", font=("Roboto", 10), width=3, command=clear).grid(row=6, column=0, pady=1,
+                                                                                   sticky="nsew")
 
     column = 3
     symbols = ["/", "*", "-", "+"]
     row = 2
     for i in symbols:
-        Button(frame, text=i, font=("Roboto", 10), width=10, command=lambda x=i: click(x), bg="#72FFFF") \
+        Button(window, text=i, font=("Roboto", 10), width=3, command=lambda x=i: click(x), bg="#72FFFF") \
             .grid(row=row,
                   column=column,
-                  pady=2)
+                  pady=1, sticky="nsew")
         row += 1
 
-    Button(frame, text="=", font=("Roboto", 10), width=10, command=evaluate, bg="#5800FF").grid(row=6, column=3, pady=2)
-    Button(frame, text=".", font=("Roboto", 10), width=10, command=lambda: click("."), bg="#72FFFF").grid(row=6,
+    Button(window, text="=", font=("Roboto", 10), width=3, command=evaluate, bg="#5800FF").grid(row=6, column=3,
+                                                                                                columnspan=1, pady=1,
+                                                                                                sticky="nsew")
+    Button(window, text=".", font=("Roboto", 10), width=3, command=lambda: click("."), bg="#72FFFF").grid(row=6,
                                                                                                           column=2,
-                                                                                                          pady=2)
-    Button(frame, text="Clear", font=("Roboto", 10), width=10, command=clear, bg="#72FFFF").grid(row=6, column=0,
-                                                                                                 pady=2)
-    Button(frame, text="(", font=("Roboto", 10), width=10, command=lambda: click("("), bg="#72FFFF").grid(row=2,
+                                                                                                          columnspan=1,
+                                                                                                          pady=1,
+                                                                                                          sticky="nsew")
+    Button(window, text="Clear", font=("Roboto", 10), width=3, command=clear, bg="#72FFFF").grid(row=6, column=0,
+                                                                                                 pady=1, sticky="nsew")
+    Button(window, text="(", font=("Roboto", 10), width=3, command=lambda: click("("), bg="#72FFFF").grid(row=2,
                                                                                                           column=0,
-                                                                                                          pady=2)
-    Button(frame, text=")", font=("Roboto", 10), width=10, command=lambda: click(")"), bg="#72FFFF").grid(row=2,
+                                                                                                          pady=1,
+                                                                                                          sticky="nsew")
+    Button(window, text=")", font=("Roboto", 10), width=3, command=lambda: click(")"), bg="#72FFFF").grid(row=2,
                                                                                                           column=1,
-                                                                                                          pady=2)
-    Button(frame, text="n!", font=("Roboto", 10), width=10, command=factorial, bg="#72FFFF").grid(row=2,
+                                                                                                          pady=1,
+                                                                                                          sticky="nsew")
+    Button(window, text="n!", font=("Roboto", 10), width=3, command=factorial, bg="#72FFFF").grid(row=2,
                                                                                                   column=2,
-                                                                                                  pady=2)
-    Button(frame, text="n\u00b2", font=("Roboto", 10), width=10, command=square, bg="#72FFFF").grid(row=1,
+                                                                                                  columnspan=1,
+                                                                                                  pady=1, sticky="nsew")
+    Button(window, text="n\u00b2", font=("Roboto", 10), width=3, command=square, bg="#72FFFF").grid(row=1,
                                                                                                     column=2,
-                                                                                                    pady=2)
-    Button(frame, text="\u03C0", font=("Roboto", 10), width=10, command=lambda x=pi: click(x), bg="#72FFFF").grid(row=1,
+                                                                                                    columnspan=1,
+                                                                                                    pady=1,
+                                                                                                    sticky="nsew")
+    Button(window, text="\u03C0", font=("Roboto", 10), width=3, command=lambda x=pi: click(x), bg="#72FFFF").grid(row=1,
                                                                                                                   column=1,
-                                                                                                                  pady=2)
-    Button(frame, text="e", font=("Roboto", 10), width=10, command=lambda x=euler: click(x), bg="#72FFFF").grid(row=1,
+                                                                                                                  pady=1,
+                                                                                                                  sticky="nsew")
+    Button(window, text="e", font=("Roboto", 10), width=3, command=lambda x=euler: click(x), bg="#72FFFF").grid(row=1,
                                                                                                                 column=0,
-                                                                                                                pady=2)
-    Button(frame, text="delete <--", font=("Roboto", 10), width=10, command=backspace, bg="#72FFFF").grid(row=1,
+                                                                                                                pady=1,
+                                                                                                                sticky="nsew")
+    Button(window, text="delete <--", font=("Roboto", 10), width=3, command=backspace, bg="#72FFFF").grid(row=1,
                                                                                                           column=3,
-                                                                                                          pady=2)
+                                                                                                          columnspan=1,
+                                                                                                          pady=1,
+                                                                                                          sticky="nsew")
 
     text.config(state="disabled")
 
